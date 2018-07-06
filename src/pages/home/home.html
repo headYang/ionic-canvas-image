@@ -1,14 +1,37 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color = "primary">
     <ion-title>
-      Ionic Blank
+      Ionic Canvas
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content padding no-bounce>
+  <div #fixedContainer ion-fixed>
+    <ion-row>
+      <ion-col *ngFor = "let color of colors" [style.background] = "color" class="color-block" tappable (click) = "selectColor(color)">
+
+      </ion-col>
+    </ion-row>
+    <ion-row radio-group [(ngModel)] = "selectedColor">
+      <ion-col *ngFor = "let color of colors" text-center>
+        <ion-radio [value]="color"></ion-radio>
+      </ion-col>
+    </ion-row>
+
+    <canvas #imageCanvas (touchstart) = "startDraw($event)" (touchmove) ="move($event)">
+    </canvas>
+    <button ion-button full (click) = "saveCanvasImage()">Save canvas image</button>
+  </div>
+  <ion-list *ngIf = "storeImage.length > 0">
+    <ion-list-header>Previous drawings</ion-list-header>
+    <ion-card *ngFor = "let obj of storeImage; let i= index">
+      <ion-card-content>
+        <img [src]="getImagepath(obj.img)" alt="">
+      </ion-card-content>
+      <button ion-button full color = "danger" (click)="removeImage(i)">
+        <ion-icon name="trash"></ion-icon>  
+      </button>
+    </ion-card>
+  </ion-list>
 </ion-content>
